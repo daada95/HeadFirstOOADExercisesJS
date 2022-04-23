@@ -1,3 +1,13 @@
+/* expected result printed in the console:
+212
+844
+1688
+6752
+13504
+27008
+1696
+*/
+
 import { Airplane } from '/airplaneClass.js';
 
 class Jet extends Airplane {

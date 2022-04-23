@@ -1,3 +1,5 @@
+// expected result: skeleton class Airplane with variable speed and methods getSpeed(), setSpeed()
+
 class Airplane {
     constructor(speed) {
         this.speed = speed;
