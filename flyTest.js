@@ -1,4 +1,6 @@
-/* expected result printed in the console:
+/* theme: inheritance/polymorphism
+
+expected result printed in the console:
 212
 844
 1688
@@ -8,7 +10,21 @@
 1696
 */
 
-import { Airplane } from '/airplaneClass.js';
+class Airplane {
+    constructor(speed) {
+        this.speed = speed;
+    }
+    getSpeed() {
+        return this.speed;
+    }
+    setSpeed(newSpeed) {
+        if (isNaN(newSpeed)) {
+            console.log("Parameter is invalid. Please set speed to a number.")
+        } else {
+            this.speed = newSpeed;
+        }
+    }
+}
 
 class Jet extends Airplane {
   constructor(multiplier, speed) {
