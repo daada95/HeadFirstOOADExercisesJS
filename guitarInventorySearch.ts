@@ -1,8 +1,16 @@
 /* step one: focus on the app doing what the customer wants
 here, I will re-write the search method to return all the matching guitars instead of one 
 
-update: new class GuitarSpec to encapsulate the guitar spec outside of Guitar object and
-divide the functionality between Guitar and GuitarSpec objects */
+update 1: new class GuitarSpec to encapsulate the guitar spec outside of Guitar object and
+divide the functionality between Guitar and GuitarSpec objects
+
+update 2: new guitarSpec property numStrings and new methods getNumStrings & compareSpecs
+reduced a lot of repetitive code by delegating the spec comparison to guitarSpec object */
+
+enum Strings {
+  SIX = 6,
+  TWELVE = 12
+}
 
 enum Builder {
   FENDER = 'Fender',
@@ -68,13 +76,15 @@ class GuitarSpec {
   type: Type;
   backWood: Wood;
   topWood: Wood;
+  numStrings: Strings;
 
-  constructor(builder: Builder, model: string, type: Type, backWood: Wood, topWood: Wood) {
+  constructor(builder: Builder, model: string, type: Type, backWood: Wood, topWood: Wood, numStrings: Strings) {
     this.builder = builder;
     this.model = model;
     this.type = type;
     this.backWood = backWood;
     this.topWood = topWood;
+    this.numStrings = numStrings;
   }
 
   getBuilder() {
@@ -95,6 +105,24 @@ class GuitarSpec {
 
   getTopWood() {
     return this.topWood;
+  }
+
+  getNumStrings() {
+    return this.numStrings;
+  }
+
+  compareSpecs(customerSpec: GuitarSpec, comparisonSpec: GuitarSpec) {
+    var match = true;
+    Object.keys(customerSpec).forEach(i => {
+      if (customerSpec[i] !== '') {
+        if (customerSpec[i] !== comparisonSpec[i]) {
+          match = false;
+        }
+      };
+  
+  })
+
+    return match;
   }
 }
 
@@ -120,80 +148,16 @@ class Inventory {
     return null;
   }
 
-  search(guitarSpec: GuitarSpec) {
+  search(customerSpec: GuitarSpec) {
     var matchingGuitars = [];
-    var builderFit = [];
-
-    if (guitarSpec.getBuilder() !== '') {
-      for (let i = 0; i < this.guitars.length; i++) {
-        if (guitarSpec.getBuilder() !== null && this.guitars[i].guitarSpec.getBuilder() === guitarSpec.getBuilder()) {
-          builderFit.push(this.guitars[i]);
-        }
-      }
-    } else if (guitarSpec.getBuilder() === '') {
-      builderFit = [...this.guitars];
-    }
-
-// as model is a "string" type, I use toLowerCase() to make sure if statement catches the model irrespective of case
-    var modelFit = [];
     
-    if (guitarSpec.getModel() !== '') {
-      if (builderFit.length > 0) {
-        for (let j = 0; j < builderFit.length; j++) {
-          if (guitarSpec.getModel().toLowerCase() !== null
-          && builderFit[j].guitarSpec.getModel().toLowerCase() === guitarSpec.getModel().toLowerCase()) {
-            modelFit.push(builderFit[j]);
-          }
-        }
+    for (let i = 0; i < this.guitars.length; i++) {
+      if (customerSpec.compareSpecs(customerSpec, this.guitars[i].guitarSpec)) {
+        matchingGuitars.push(this.guitars[i]);
       }
-    } else if (guitarSpec.getModel() === '') {
-      modelFit = [...builderFit];
     }
 
-    var typeFit = [];
-
-    if (guitarSpec.getType() !== '') {
-      if (modelFit.length > 0) {
-        for (let k = 0; k < modelFit.length; k++) {
-          if (guitarSpec.getType() !== null && modelFit[k].guitarSpec.getType() === guitarSpec.getType()) {
-            typeFit.push(modelFit[k]);
-          }
-        }
-      }
-    } else if (guitarSpec.getType() === '') {
-      typeFit = [...modelFit];
-    }
-
-    var backWoodFit = [];
-
-    if (guitarSpec.getBackWood() !== '') {
-      if (typeFit.length > 0) {
-        for (let m = 0; m < typeFit.length; m++) {
-          if (guitarSpec.getBackWood() !== null && typeFit[m].guitarSpec.getBackWood() === guitarSpec.getBackWood()) {
-            backWoodFit.push(typeFit[m]);
-          }
-        }
-      }
-    } else if (guitarSpec.getBackWood() === '') {
-      backWoodFit = [...typeFit];
-    }
-
-    var topWoodFit = [];
-
-    if (guitarSpec.getTopWood() !== '') {
-      if (backWoodFit.length > 0) {
-        for (let n = 0; n < backWoodFit.length; n++) {
-          if (guitarSpec.getTopWood() !== null && backWoodFit[n].guitarSpec.getTopWood() === guitarSpec.getTopWood()) {
-            topWoodFit.push(backWoodFit[n]);
-          }
-        }
-      }
-    } else if (guitarSpec.getTopWood() === '') {
-      topWoodFit = [...backWoodFit];
-    }
-
-    if (topWoodFit.length > 0) {
-      matchingGuitars = [...topWoodFit];
+    if (matchingGuitars.length > 0) {
       return matchingGuitars;
     } else {
       return '- Sorry Erin, nothing fits your request.';
@@ -202,13 +166,13 @@ class Inventory {
 }
 
 let inventory = new Inventory([]);
-let stratocaster = new GuitarSpec(Builder.FENDER, 'Stratocaster', Type.ELECTRIC, Wood.ALDER, Wood.ALDER);
-let jaguar = new GuitarSpec(Builder.FENDER, 'Jaguar', Type.ELECTRIC, Wood.ALDER, Wood.ALDER);
+let stratocaster = new GuitarSpec(Builder.FENDER, 'Stratocaster', Type.ELECTRIC, Wood.ALDER, Wood.ALDER, Strings.SIX);
+let jaguar = new GuitarSpec(Builder.FENDER, 'Jaguar', Type.ELECTRIC, Wood.ALDER, Wood.ALDER, Strings.SIX);
 inventory.addGuitar(95693, 1499.95, stratocaster);
 inventory.addGuitar(95612, 1549.95, stratocaster);
 inventory.addGuitar(95694, 1350.95, jaguar);
 
-let whatErinLikes = new GuitarSpec(Builder.FENDER, '', Type.ELECTRIC, Wood.ALDER, Wood.ALDER);
+let whatErinLikes = new GuitarSpec(Builder.FENDER, 'Stratocaster', Type.ELECTRIC, Wood.ALDER, Wood.ALDER, Strings.SIX);
 let whatErinCanGet = () => {
   console.log('Hi Erin, here are your options: ');
   console.log(inventory.search(whatErinLikes))
