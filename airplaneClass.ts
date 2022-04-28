@@ -1,7 +1,7 @@
 // expected result: skeleton class Airplane with variable speed and methods getSpeed(), setSpeed()
 
 // @ts-ignore
-class Airplane {
+export class Airplane {
     speed: number;
   
     constructor(speed: number) {

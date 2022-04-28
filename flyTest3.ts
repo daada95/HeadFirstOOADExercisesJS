@@ -10,41 +10,8 @@ notes to self:
 2. setter/getter functions are a fine way to implement it in JS
 */
 
-// @ts-ignore
-class Airplane {
-  speed: number;
-
-  constructor(speed: number) {
-    this.speed = speed;
-  }
-  
-  getSpeed() {
-    return this.speed;
-  }
-
-  setSpeed(newSpeed: number) {
-      this.speed = newSpeed;
-  }
-}
-
-// @ts-ignore
-class Jet extends Airplane {
-  multiplier: number;
-  speed: number;
-
-  constructor(speed: number) {
-    super(speed);
-    this.multiplier = 2;
-  }
-  
-  setSpeed(newSpeed: number) {
-    this.speed = newSpeed * this.multiplier;
-  }
-  
-  accelerate() {
-    super.setSpeed(super.getSpeed() * 2);
-  }
-}
+import { Airplane } from './airplaneClass';
+import { Jet } from './flyTest';
 
 let concorde = new Jet(2179);
 concorde.setSpeed(2179);

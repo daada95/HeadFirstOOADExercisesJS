@@ -10,25 +10,9 @@ expected result printed in the console:
 1696
 */
 
-// @ts-ignore
-class Airplane {
-  speed: number;
+import { Airplane } from './airplaneClass';
 
-  constructor(speed: number) {
-    this.speed = speed;
-  }
-  
-  getSpeed() {
-    return this.speed;
-  }
-
-  setSpeed(newSpeed: number) {
-      this.speed = newSpeed;
-  }
-}
-
-// @ts-ignore
-class Jet extends Airplane {
+export class Jet extends Airplane {
   multiplier: number;
   speed: number;
 
