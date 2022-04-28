@@ -1,4 +1,9 @@
-class DogDoor {
+/* chapter about requirements solicitation - we're creating a dog door
+and implementing the changes the customer wants - e.g., a timer to close
+the door automatically after some time
+*/
+
+export class DogDoor {
   open: boolean;
 
   constructor() {
@@ -27,7 +32,7 @@ class DogDoor {
     }
 }
 
-class Remote {
+export class Remote {
   door: DogDoor;
 
   constructor(door: DogDoor) {
@@ -41,6 +46,9 @@ class Remote {
     }
     else {
       this.door.openUp();
+      setTimeout(() => {
+        this.door.close();
+      }, 5000);
     }
   }
 }
